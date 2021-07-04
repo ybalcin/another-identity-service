@@ -6,21 +6,22 @@ import (
 	t "time"
 )
 
-type User struct {
+type user struct {
 	Id                   p.ObjectID   `bson:"id"`
-	FirstName            string       `bson:"first_name"`
-	LastName             string       `bson:"last_name"`
-	UserName             string       `bson:"user_name"`
+	Firstname            string       `bson:"first_name"`
+	Lastname             string       `bson:"last_name"`
+	Username             string       `bson:"user_name"`
+	NormalizedUsername   string       `bson:"normalized_user_name"`
 	Email                string       `bson:"email"`
-	EmailConfirmed       bool         `bson:"email_confirmed"`
 	NormalizedEmail      string       `bson:"normalized_email"`
+	EmailConfirmed       bool         `bson:"email_confirmed"`
 	PasswordHash         string       `bson:"password_hash"`
 	BirthDate            t.Time       `bson:"birth_date"`
 	PhoneNumber          string       `bson:"phone_number"`
 	PhoneNumberConfirmed bool         `bson:"phone_number_confirmed"`
 	LastLoginDate        t.Time       `bson:"last_login_date"`
 	Gdpr                 bool         `bson:"gdpr"`
-	Roles                []Role       `bson:"roles"`
+	Roles                []role       `bson:"roles"`
 	Addresses            []vo.Address `bson:"addresses"`
 	CreatedDate          t.Time       `bson:"created_date"`
 	UpdatedDate          t.Time       `bson:"updated_date"`
