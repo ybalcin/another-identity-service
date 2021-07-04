@@ -1,4 +1,4 @@
-package domain
+package valueObjects
 
 type Address struct {
 	Country string `bson:"country"`
