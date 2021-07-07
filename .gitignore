@@ -22,3 +22,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/.idea/another-identity-service.iml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
