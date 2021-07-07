@@ -1,13 +1,13 @@
 package domain
 
 import (
-	vo "github.com/ybalcin/another-identity-service/domain/valueObjects"
+	vo "github.com/ybalcin/another-identity-service/domain/value_objects"
 	p "go.mongodb.org/mongo-driver/bson/primitive"
 	t "time"
 )
 
 type user struct {
-	Id                   p.ObjectID   `bson:"id"`
+	Id                   p.ObjectID   `bson:"_id"`
 	Firstname            string       `bson:"first_name"`
 	Lastname             string       `bson:"last_name"`
 	Username             string       `bson:"user_name"`

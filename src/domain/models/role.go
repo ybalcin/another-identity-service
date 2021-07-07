@@ -1,6 +1,8 @@
 package domain
 
+import p "go.mongodb.org/mongo-driver/bson/primitive"
+
 type role struct {
-	Id   string `bson:"id"`
-	Name string `bson:"name"`
+	Id   p.ObjectID `bson:"_id"`
+	Name string     `bson:"name"`
 }

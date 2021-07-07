@@ -1,4 +1,4 @@
-package valueObjects
+package value_objects
 
 type Address struct {
 	Country string `bson:"country"`
