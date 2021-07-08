@@ -1,9 +1,10 @@
 package domain
 
 import (
+	t "time"
+
 	vo "github.com/ybalcin/another-identity-service/domain/value_objects"
 	p "go.mongodb.org/mongo-driver/bson/primitive"
-	t "time"
 )
 
 type user struct {
