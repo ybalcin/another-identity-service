@@ -1,8 +1,8 @@
-package domain
+package authorization
 
 import p "go.mongodb.org/mongo-driver/bson/primitive"
 
-type country struct {
-	Id   p.ObjectID `bson:"id"`
+type role struct {
+	Id   p.ObjectID `bson:"_id"`
 	Name string     `bson:"name"`
 }
