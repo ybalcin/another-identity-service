@@ -1,0 +1,5 @@
+{
+    "Port"      : "8080",
+    "MongoUri"  : "mongodb+srv://identityServiceUser:HMPQ4jXPCrxEDB58@cluster0.l1pmb.mongodb.net",
+    "Database"  : "another-identity-service-store"
+  }

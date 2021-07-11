@@ -5,7 +5,7 @@ import (
 	t "time"
 
 	l "github.com/ybalcin/another-identity-service/location"
-	"github.com/ybalcin/another-identity-service/shared"
+	"github.com/ybalcin/another-identity-service/utils"
 	p "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -46,16 +46,17 @@ func NewUser(id UserId, firstname string, lastname string, username string, emai
 		Firstname:            firstname,
 		Lastname:             lastname,
 		Username:             username,
-		NormalizedUsername:   strings.ToUpper(*shared.RemoveDiacritics(&username)),
+		NormalizedUsername:   strings.ToUpper(*utils.RemoveDiacritics(&username)),
 		EmailConfirmed:       false,
 		PasswordHash:         passwordHash,
 		BirthDate:            birthdate,
 		PhoneNumber:          phoneNumber,
 		PhoneNumberConfirmed: false,
 		Email:                email,
-		NormalizedEmail:      strings.ToUpper(*shared.RemoveDiacritics(&email)),
+		NormalizedEmail:      strings.ToUpper(*utils.RemoveDiacritics(&email)),
 		Gdpr:                 gdpr,
 		Addresses:            addresses,
+		Roles:                []string{},
 		LastLoginDate:        t.Now().UTC(),
 		CreatedDate:          t.Now().UTC(),
 		UpdatedDate:          t.Now().UTC(),
