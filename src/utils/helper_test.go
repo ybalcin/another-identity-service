@@ -8,9 +8,9 @@ func TestRemoveDiacritics(t *testing.T) {
 	str := "éşçİüğ"
 	str_removed_diacritics := "escIug"
 
-	result := RemoveDiacritics(&str)
+	result := RemoveDiacritics(str)
 
-	if *result != str_removed_diacritics {
-		t.Errorf("Could not removed diacritics! %v", *result)
+	if result != str_removed_diacritics {
+		t.Errorf("Could not removed diacritics! %v", result)
 	}
 }

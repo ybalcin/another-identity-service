@@ -3,7 +3,7 @@ package shared_kernel
 import (
 	"testing"
 
-	"github.com/ybalcin/another-identity-service/data"
+	"github.com/ybalcin/another-identity-service/mongo_store"
 )
 
 func TestInitConfig(t *testing.T) {
@@ -17,7 +17,7 @@ func TestInitConfig(t *testing.T) {
 func TestInitMgoConfig(t *testing.T) {
 	initMongo()
 
-	if data.MgoConfig.Database == "" || data.MgoConfig.Uri == "" {
+	if mongo_store.MgoConfig.Database == "" || mongo_store.MgoConfig.Uri == "" {
 		t.Errorf("mgo config cannot initialized!")
 	}
 }
