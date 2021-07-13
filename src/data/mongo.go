@@ -9,7 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const CONNECTED = "Successfully connected to database: %v"
+const (
+	CONNECTED     = "Successfully connected to database: %s"
+	ERR_NEWCLIENT = "[log_mongo_connectomongo_newclient]: %s"
+	ERR_CONNECT   = "[log_mongo_connectomongo_connect]: %s"
+)
 
 type (
 	MongoConfig struct {
@@ -54,11 +58,11 @@ func connectToMongo() (*mongo.Client, *mongo.Database) {
 	var session *mongo.Client
 	session, err = mongo.NewClient(options.Client().ApplyURI(MgoConfig.Uri))
 	if err != nil {
-		log.Fatalf("[log_mongo_connectomongo_newclient]: %s", err)
+		log.Fatalf(ERR_NEWCLIENT, err)
 	}
 
 	if err = session.Connect(context.Background()); err != nil {
-		log.Fatalf("[log_mongo_connectomongo_connect]: %s", err)
+		log.Fatalf(ERR_CONNECT, err)
 	}
 
 	database := session.Database(MgoConfig.Database)

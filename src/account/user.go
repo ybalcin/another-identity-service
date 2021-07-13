@@ -34,8 +34,8 @@ type user struct {
 }
 
 // NewUser creates new user
-func NewUser(id UserId, firstname string, lastname string, username string, email string, passwordHash string, birthdate t.Time,
-	phoneNumber string, gdpr bool, address *l.Address) *user {
+func NewUser(id UserId, firstname string, lastname string, username string, email string, password_hash string, birth_date t.Time,
+	phone_number string, gdpr bool, address *l.Address) *user {
 
 	addresses := []l.Address{
 		*address,
@@ -48,9 +48,9 @@ func NewUser(id UserId, firstname string, lastname string, username string, emai
 		Username:             username,
 		NormalizedUsername:   strings.ToUpper(*utils.RemoveDiacritics(&username)),
 		EmailConfirmed:       false,
-		PasswordHash:         passwordHash,
-		BirthDate:            birthdate,
-		PhoneNumber:          phoneNumber,
+		PasswordHash:         password_hash,
+		BirthDate:            birth_date,
+		PhoneNumber:          phone_number,
 		PhoneNumberConfirmed: false,
 		Email:                email,
 		NormalizedEmail:      strings.ToUpper(*utils.RemoveDiacritics(&email)),

@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+const (
+	ERR_OPEN   string = "[log_config_initconfig_open]: %s"
+	ERR_DECODE string = "[log_config_initconfig_decode]: %s"
+)
+
 // AppConfig keeps application configs
 var AppConfig config
 
@@ -21,7 +26,7 @@ func initConfig() {
 	var file *os.File
 	file, err = os.Open("config.json")
 	if err != nil {
-		log.Fatalf("[log_config_initconfig_open]: %s", err)
+		log.Fatalf(ERR_OPEN, err)
 		return
 	}
 	defer file.Close()
@@ -30,7 +35,7 @@ func initConfig() {
 	AppConfig = config{}
 	if err = decoder.Decode(&AppConfig); err != nil {
 		// log
-		log.Fatalf("[log_config_initconfig_decode]: %s", err)
+		log.Fatalf(ERR_DECODE, err)
 		return
 	}
 }
