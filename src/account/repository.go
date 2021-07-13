@@ -1,10 +1,10 @@
-package data
+package account
 
 import (
 	"context"
 	"log"
-	"os/user"
 
+	"github.com/ybalcin/another-identity-service/mongo_store"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -20,8 +20,8 @@ type (
 )
 
 type UserRepository interface {
-	//	AddNewUser adds new user
-	AddNewUser(user *user.User) *ErrUserRepository
+	//	AddNewUser adds new user to collection
+	AddNewUser(user *user) *ErrUserRepository
 }
 
 type userRepository struct {
@@ -29,7 +29,7 @@ type userRepository struct {
 }
 
 //	Insert insert one user to collection
-func (r *userRepository) AddNewUser(user *user.User) *ErrUserRepository {
+func (r *userRepository) AddNewUser(user *user) *ErrUserRepository {
 	_, err := r.users.InsertOne(context.Background(), user)
 	if err != nil {
 		log.Fatalf(ERR_INSERT+": %s", err)
@@ -43,9 +43,10 @@ func (r *userRepository) AddNewUser(user *user.User) *ErrUserRepository {
 }
 
 //	NewUserRepository gets new user repository
-func NewUserRepository() *userRepository {
+func NewUserRepository() UserRepository {
+	mgoStore := mongo_store.GetMgoStore()
 	userRepo := userRepository{
-		users: mgoStore.Db.Collection("users"),
+		users: mgoStore.Db.Collection(user_collection),
 	}
 	return &userRepo
 }
