@@ -1,4 +1,4 @@
-package data
+package mongo_store
 
 import (
 	"context"

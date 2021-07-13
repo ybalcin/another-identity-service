@@ -1,7 +1,6 @@
 package account
 
 import (
-	"strings"
 	t "time"
 
 	l "github.com/ybalcin/another-identity-service/location"
@@ -9,22 +8,25 @@ import (
 	p "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+//	user colleciton name
+const user_collection string = "users"
+
 //	Unique identifier for user
 type UserId p.ObjectID
 
 type user struct {
-	UserId               UserId      `bson:"_id"`
-	Firstname            string      `bson:"first_name"`
-	Lastname             string      `bson:"last_name"`
-	Username             string      `bson:"user_name"`
-	NormalizedUsername   string      `bson:"normalized_user_name"`
+	UserId               p.ObjectID  `bson:"_id"`
+	Firstname            string      `bson:"firstname"`
+	Lastname             string      `bson:"lastname"`
+	Username             string      `bson:"username"`
+	NormalizedUsername   string      `bson:"normalized_username"`
 	Email                string      `bson:"email"`
 	NormalizedEmail      string      `bson:"normalized_email"`
 	EmailConfirmed       bool        `bson:"email_confirmed"`
 	PasswordHash         string      `bson:"password_hash"`
-	BirthDate            t.Time      `bson:"birth_date"`
-	PhoneNumber          string      `bson:"phone_number"`
-	PhoneNumberConfirmed bool        `bson:"phone_number_confirmed"`
+	BirthDate            t.Time      `bson:"birthdate"`
+	PhoneNumber          string      `bson:"phonenumber"`
+	PhoneNumberConfirmed bool        `bson:"phonenumber_confirmed"`
 	LastLoginDate        t.Time      `bson:"last_login_date"`
 	Gdpr                 bool        `bson:"gdpr"`
 	Roles                []string    `bson:"roles"`
@@ -34,7 +36,7 @@ type user struct {
 }
 
 // NewUser creates new user
-func NewUser(id UserId, firstname string, lastname string, username string, email string, password_hash string, birth_date t.Time,
+func CreateNewUser(id UserId, firstname string, lastname string, username string, email string, password_hash string, birth_date t.Time,
 	phone_number string, gdpr bool, address *l.Address) *user {
 
 	addresses := []l.Address{
@@ -42,18 +44,18 @@ func NewUser(id UserId, firstname string, lastname string, username string, emai
 	}
 
 	return &user{
-		UserId:               id,
+		UserId:               p.ObjectID(id),
 		Firstname:            firstname,
 		Lastname:             lastname,
 		Username:             username,
-		NormalizedUsername:   strings.ToUpper(*utils.RemoveDiacritics(&username)),
+		NormalizedUsername:   utils.NormalizeWithUpper(username),
 		EmailConfirmed:       false,
 		PasswordHash:         password_hash,
 		BirthDate:            birth_date,
 		PhoneNumber:          phone_number,
 		PhoneNumberConfirmed: false,
 		Email:                email,
-		NormalizedEmail:      strings.ToUpper(*utils.RemoveDiacritics(&email)),
+		NormalizedEmail:      utils.NormalizeWithUpper(email),
 		Gdpr:                 gdpr,
 		Addresses:            addresses,
 		Roles:                []string{},

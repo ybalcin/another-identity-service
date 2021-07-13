@@ -1,4 +1,4 @@
-package data
+package mongo_store
 
 import (
 	"context"
@@ -32,6 +32,11 @@ var MgoConfig MongoConfig
 
 //	mgoStore keeps mongo db and session
 var mgoStore MongoStore
+
+//	GetMgoStore gets active mongo store
+func GetMgoStore() *MongoStore {
+	return &mgoStore
+}
 
 //	InitMongo initializes mongo store
 func InitMongo() {
