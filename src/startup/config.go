@@ -1,4 +1,4 @@
-package shared_kernel
+package startup
 
 import (
 	"encoding/json"

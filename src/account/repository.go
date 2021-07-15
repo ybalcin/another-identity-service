@@ -4,12 +4,12 @@ import (
 	"context"
 	"log"
 
-	"github.com/ybalcin/another-identity-service/mongo_store"
+	"github.com/ybalcin/another-identity-service/store"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
-	ERR_INSERT string = "[log_userrepository_insert_insertone]"
+	ERR_INSERT string = "[log_account_repository_insert_insertone]"
 )
 
 type (
@@ -20,16 +20,15 @@ type (
 )
 
 type UserRepository interface {
-	//	AddNewUser adds new user to collection
-	AddNewUser(user *user) *ErrUserRepository
+	//	InsertNewUser inserts new user to collection
+	InsertNewUser(user *user) *ErrUserRepository
 }
 
 type userRepository struct {
 	users *mongo.Collection
 }
 
-//	Insert insert one user to collection
-func (r *userRepository) AddNewUser(user *user) *ErrUserRepository {
+func (r *userRepository) InsertNewUser(user *user) *ErrUserRepository {
 	_, err := r.users.InsertOne(context.Background(), user)
 	if err != nil {
 		log.Fatalf(ERR_INSERT+": %s", err)
@@ -44,7 +43,7 @@ func (r *userRepository) AddNewUser(user *user) *ErrUserRepository {
 
 //	NewUserRepository gets new user repository
 func NewUserRepository() UserRepository {
-	mgoStore := mongo_store.GetMgoStore()
+	mgoStore := store.GetMgoStore()
 	userRepo := userRepository{
 		users: mgoStore.Db.Collection(user_collection),
 	}

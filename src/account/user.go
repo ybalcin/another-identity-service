@@ -36,8 +36,10 @@ type user struct {
 }
 
 // NewUser creates new user
-func CreateNewUser(id UserId, firstname string, lastname string, username string, email string, password_hash string, birth_date t.Time,
+func CreateNewUser(id UserId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
 	phone_number string, gdpr bool, address *l.Address) *user {
+
+	//	validations
 
 	addresses := []l.Address{
 		*address,
@@ -50,7 +52,7 @@ func CreateNewUser(id UserId, firstname string, lastname string, username string
 		Username:             username,
 		NormalizedUsername:   utils.NormalizeWithUpper(username),
 		EmailConfirmed:       false,
-		PasswordHash:         password_hash,
+		PasswordHash:         utils.HashPassword(passsword),
 		BirthDate:            birth_date,
 		PhoneNumber:          phone_number,
 		PhoneNumberConfirmed: false,

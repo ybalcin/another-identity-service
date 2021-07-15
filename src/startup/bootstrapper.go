@@ -1,7 +1,7 @@
-package shared_kernel
+package startup
 
 import (
-	"github.com/ybalcin/another-identity-service/mongo_store"
+	"github.com/ybalcin/another-identity-service/store"
 )
 
 //	BootstrapperInit starts application requirements
@@ -16,10 +16,10 @@ func BootstrapperInit() {
 
 func initMongo() {
 	//	Set config
-	mongo_store.MgoConfig = mongo_store.MongoConfig{
+	store.MgoConfig = store.MongoConfig{
 		Uri:      AppConfig.MongoUri,
 		Database: AppConfig.Database,
 	}
 	//	Initialize mongo store
-	mongo_store.InitMongo()
+	store.InitMongo()
 }
