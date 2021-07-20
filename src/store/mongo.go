@@ -11,8 +11,8 @@ import (
 
 const (
 	CONNECTED     = "Successfully connected to database: %s"
-	ERR_NEWCLIENT = "[log_mongo_store_mongo_connectomongo_newclient]: %s"
-	ERR_CONNECT   = "[log_mongo_store_mongo_connectomongo_connect]: %s"
+	ERR_NEWCLIENT = "[log_store_mongo_connectomongo_newclient]: %s"
+	ERR_CONNECT   = "[log_store_mongo_connectomongo_connect]: %s"
 )
 
 type (

@@ -13,7 +13,7 @@ const (
 )
 
 type (
-	ErrUserRepository struct {
+	errRepository struct {
 		Message        string
 		InnerException error
 	}
@@ -21,18 +21,18 @@ type (
 
 type UserRepository interface {
 	//	InsertNewUser inserts new user to collection
-	InsertNewUser(user *user) *ErrUserRepository
+	InsertNewUser(user *user) *errRepository
 }
 
 type userRepository struct {
 	users *mongo.Collection
 }
 
-func (r *userRepository) InsertNewUser(user *user) *ErrUserRepository {
+func (r *userRepository) InsertNewUser(user *user) *errRepository {
 	_, err := r.users.InsertOne(context.Background(), user)
 	if err != nil {
 		log.Fatalf(ERR_INSERT+": %s", err)
-		return &ErrUserRepository{
+		return &errRepository{
 			Message:        ERR_INSERT,
 			InnerException: err,
 		}
