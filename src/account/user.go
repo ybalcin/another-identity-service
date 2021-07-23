@@ -6,6 +6,8 @@ import (
 	l "github.com/ybalcin/another-identity-service/location"
 	"github.com/ybalcin/another-identity-service/utils"
 	p "go.mongodb.org/mongo-driver/bson/primitive"
+	"gopkg.in/go-playground/validator.v9"
+	v "gopkg.in/go-playground/validator.v9"
 )
 
 //	user colleciton name
@@ -20,7 +22,7 @@ type user struct {
 	Lastname             string      `bson:"lastname"`
 	Username             string      `bson:"username"`
 	NormalizedUsername   string      `bson:"normalized_username"`
-	Email                string      `bson:"email"`
+	Email                string      `bson:"email" validate:"email"`
 	NormalizedEmail      string      `bson:"normalized_email"`
 	EmailConfirmed       bool        `bson:"email_confirmed"`
 	PasswordHash         string      `bson:"password_hash"`
@@ -39,25 +41,23 @@ type user struct {
 func CreateNewUser(id UserId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
 	phone_number string, gdpr bool, address *l.Address) *user {
 
-	//	validations
-
 	addresses := []l.Address{
 		*address,
 	}
 
-	return &user{
+	user := user{
 		UserId:               p.ObjectID(id),
 		Firstname:            firstname,
 		Lastname:             lastname,
 		Username:             username,
-		NormalizedUsername:   utils.NormalizeWithUpper(username),
+		NormalizedUsername:   utils.Normalize(username),
 		EmailConfirmed:       false,
 		PasswordHash:         utils.HashPassword(passsword),
 		BirthDate:            birth_date,
 		PhoneNumber:          phone_number,
 		PhoneNumberConfirmed: false,
 		Email:                email,
-		NormalizedEmail:      utils.NormalizeWithUpper(email),
+		NormalizedEmail:      utils.Normalize(email),
 		Gdpr:                 gdpr,
 		Addresses:            addresses,
 		Roles:                []string{},
@@ -65,6 +65,18 @@ func CreateNewUser(id UserId, firstname string, lastname string, username string
 		CreatedDate:          t.Now().UTC(),
 		UpdatedDate:          t.Now().UTC(),
 	}
+
+	return &user
+}
+
+func (u *user) Validate() v.ValidationErrors {
+	validate := validator.New()
+	err := validate.Struct(u)
+	if err == nil {
+		return nil
+	}
+
+	return err.(v.ValidationErrors)
 }
 
 // NewUserId generates uniqueue user Id

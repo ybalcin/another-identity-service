@@ -27,7 +27,7 @@ func RemoveDiacritics(str string) string {
 }
 
 //	NormalizedWithUpper removes diacritics from str then upper it
-func NormalizeWithUpper(str string) string {
+func Normalize(str string) string {
 	if str == "" {
 		return str
 	}
