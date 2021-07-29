@@ -4,36 +4,32 @@ import (
 	"context"
 	"log"
 
+	"github.com/ybalcin/another-identity-service/common"
 	"github.com/ybalcin/another-identity-service/store"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
-	ERR_INSERT string = "[log_account_repository_insert_insertone]"
-)
-
-type (
-	errRepository struct {
-		Message        string
-		InnerException error
-	}
+	ERR_INSERT string = "[log_account_repository_insertnewuser_insertone]"
 )
 
 type UserRepository interface {
 	//	InsertNewUser inserts new user to collection
-	InsertNewUser(user *user) *errRepository
+	InsertNewUser(user *user) *common.FriendlyError
 }
 
 type userRepository struct {
 	users *mongo.Collection
 }
 
-func (r *userRepository) InsertNewUser(user *user) *errRepository {
+func (r *userRepository) InsertNewUser(user *user) *common.FriendlyError {
+
 	_, err := r.users.InsertOne(context.Background(), user)
 	if err != nil {
 		log.Fatalf(ERR_INSERT+": %s", err)
-		return &errRepository{
+		return &common.FriendlyError{
 			Message:        ERR_INSERT,
+			DevMessage:     ERR_INSERT,
 			InnerException: err,
 		}
 	}

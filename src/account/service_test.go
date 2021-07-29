@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ybalcin/another-identity-service/common"
 	"github.com/ybalcin/another-identity-service/location"
 )
 
@@ -12,7 +13,7 @@ func TestAddNewUser(t *testing.T) {
 	users := []*user{}
 
 	repo := new(mockRepository)
-	repo.InsertNewUserFn = func(user *user) *errRepository {
+	repo.InsertNewUserFn = func(user *user) *common.FriendlyError {
 		users = append(users, user)
 		return nil
 	}
@@ -33,8 +34,8 @@ func TestAddNewUser(t *testing.T) {
 
 func TestAddNewUserErrRepository(t *testing.T) {
 	repo := new(mockRepository)
-	repo.InsertNewUserFn = func(user *user) *errRepository {
-		return &errRepository{
+	repo.InsertNewUserFn = func(user *user) *common.FriendlyError {
+		return &common.FriendlyError{
 			Message:        "test message",
 			InnerException: errors.New("test error"),
 		}
