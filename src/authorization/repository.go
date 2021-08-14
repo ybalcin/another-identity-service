@@ -2,6 +2,7 @@ package authorization
 
 import (
 	"context"
+	"log"
 
 	"github.com/ybalcin/another-identity-service/common"
 	"github.com/ybalcin/another-identity-service/store"
@@ -9,9 +10,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+const (
+	ERR_INSERT string = "[log_authorization_repository_insertnewrole_insertone]"
+)
+
 type (
 	RoleRepository interface {
 		GetAll() ([]role, *common.FriendlyError)
+		InsertNewRole(role *role) *common.FriendlyError
 	}
 	roleRepository struct {
 		roles *mongo.Collection
@@ -34,6 +40,20 @@ func (r *roleRepository) GetAll() ([]role, *common.FriendlyError) {
 	}
 
 	return roles, nil
+}
+
+func (r *roleRepository) InsertNewRole(role *role) *common.FriendlyError {
+	_, err := r.roles.InsertOne(context.Background(), role)
+	if err != nil {
+		log.Fatalf(ERR_INSERT+": %s", err)
+		return &common.FriendlyError{
+			Message:        ERR_INSERT,
+			DevMessage:     ERR_INSERT,
+			InnerException: err,
+		}
+	}
+
+	return nil
 }
 
 func NewRoleRepository() RoleRepository {

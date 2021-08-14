@@ -15,7 +15,7 @@ import (
 const user_collection string = "users"
 
 //	Unique identifier for user
-type UserId p.ObjectID
+type userId p.ObjectID
 
 type user struct {
 	UserId               p.ObjectID  `bson:"_id"`
@@ -39,7 +39,7 @@ type user struct {
 }
 
 // NewUser creates new user
-func CreateNewUser(id UserId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
+func CreateNewUser(id userId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
 	phone_number string, gdpr bool, address *l.Address) (*user, []*common.ValidationError) {
 
 	addresses := []l.Address{
@@ -75,9 +75,21 @@ func CreateNewUser(id UserId, firstname string, lastname string, username string
 	return &user, nil
 }
 
+func (u *user) Equals(other *user) bool {
+	if other == nil {
+		return false
+	}
+
+	if u == other {
+		return true
+	}
+
+	return u.UserId == other.UserId
+}
+
 // NewUserId generates uniqueue user Id
-func NewUserId() UserId {
-	return UserId(p.NewObjectID())
+func NewUserId() userId {
+	return userId(p.NewObjectID())
 }
 
 func validate(u *user) []*common.ValidationError {
