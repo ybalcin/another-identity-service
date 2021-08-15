@@ -11,8 +11,12 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-//	user colleciton name
-const user_collection string = "users"
+const (
+	//	user colleciton name
+	user_collection string = "users"
+
+	ERR_EMPTY_ROLE_NAME = "Role name is empty!"
+)
 
 //	Unique identifier for user
 type userId p.ObjectID
@@ -27,7 +31,7 @@ type user struct {
 	NormalizedEmail      string      `bson:"normalized_email"`
 	EmailConfirmed       bool        `bson:"email_confirmed"`
 	PasswordHash         string      `bson:"password_hash"`
-	BirthDate            t.Time      `bson:"birthdate" validate:"ne=nil"`
+	BirthDate            t.Time      `bson:"birthdate"`
 	PhoneNumber          string      `bson:"phonenumber" validate:"ne=''"`
 	PhoneNumberConfirmed bool        `bson:"phonenumber_confirmed"`
 	LastLoginDate        t.Time      `bson:"last_login_date"`
@@ -85,6 +89,17 @@ func (u *user) Equals(other *user) bool {
 	}
 
 	return u.UserId == other.UserId
+}
+
+func (u *user) AddRole(roleName string) *common.FriendlyError {
+	if roleName == "" {
+		return &common.FriendlyError{
+			Message: ERR_EMPTY_ROLE_NAME,
+		}
+	}
+
+	u.Roles = append(u.Roles, roleName)
+	return nil
 }
 
 // NewUserId generates uniqueue user Id

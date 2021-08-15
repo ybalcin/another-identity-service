@@ -15,17 +15,16 @@ type (
 		FriendlyMessage string
 		InnerException  error
 	}
+
+	Service interface {
+		//	AddNewUser adds new user
+		AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
+			phone_number string, gdpr bool, address *location.Address) *errService
+	}
+	service struct {
+		users UserRepository
+	}
 )
-
-type Service interface {
-	//	AddNewUser adds new user
-	AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
-		phone_number string, gdpr bool, address *location.Address) *errService
-}
-
-type service struct {
-	users UserRepository
-}
 
 func (s *service) AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
 	phone_number string, gdpr bool, address *location.Address) *errService {
