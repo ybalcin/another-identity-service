@@ -9,11 +9,14 @@ type (
 		InsertNewUserFn      func(user *user) *common.FriendlyError
 		InsertNewUserInvoked bool
 
-		AddNewRoleFn      func(user *user, roleName string) *common.FriendlyError
-		AddNewRoleInvoked bool
-
 		GetUserByIdFn      func(id userId) (*user, *common.FriendlyError)
 		GetUserByIdInvoked bool
+
+		UpdateOneByFieldsFn      func(user *user, fields []string) *common.FriendlyError
+		UpdateOneByFieldsInvoked bool
+
+		UpdateOneFn      func(user *user) *common.FriendlyError
+		UpdateOneInvoked bool
 	}
 )
 
@@ -22,12 +25,17 @@ func (r *mockRepository) InsertNewUser(user *user) *common.FriendlyError {
 	return r.InsertNewUserFn(user)
 }
 
-func (r *mockRepository) AddNewRole(user *user, roleName string) *common.FriendlyError {
-	r.AddNewRoleInvoked = true
-	return r.AddNewRoleFn(user, roleName)
-}
-
 func (r *mockRepository) GetUserById(id userId) (*user, *common.FriendlyError) {
 	r.GetUserByIdInvoked = true
 	return r.GetUserByIdFn(id)
+}
+
+func (r *mockRepository) UpdateOneByFields(user *user, fields []string) *common.FriendlyError {
+	r.UpdateOneByFieldsInvoked = true
+	return r.UpdateOneByFieldsFn(user, fields)
+}
+
+func (r *mockRepository) UpdateOne(user *user) *common.FriendlyError {
+	r.UpdateOneInvoked = true
+	return r.UpdateOneFn(user)
 }

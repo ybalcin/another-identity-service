@@ -2,6 +2,7 @@ package account
 
 import (
 	"fmt"
+	"reflect"
 	t "time"
 
 	"github.com/ybalcin/another-identity-service/common"
@@ -102,9 +103,22 @@ func (u *user) AddRole(roleName string) *common.FriendlyError {
 	return nil
 }
 
+func (u *user) GetFieldValue(field string) interface{} {
+	e := reflect.ValueOf(u).Elem()
+
+	reflectedField := e.FieldByName(field)
+	return reflectedField.Interface()
+}
+
 // NewUserId generates uniqueue user Id
 func NewUserId() userId {
 	return userId(p.NewObjectID())
+}
+
+func UserIdFromHex(id string) userId {
+	objId, _ := p.ObjectIDFromHex(id)
+
+	return userId(objId)
 }
 
 func validate(u *user) []*common.ValidationError {

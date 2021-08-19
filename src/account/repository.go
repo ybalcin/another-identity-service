@@ -19,10 +19,12 @@ type (
 	UserRepository interface {
 		//	InsertNewUser inserts new user to collection
 		InsertNewUser(user *user) *common.FriendlyError
-		//	Adds new role to user
-		AddNewRole(user *user, roleName string) *common.FriendlyError
-		// Gets user by id
+		//	Gets user by id
 		GetUserById(id userId) (*user, *common.FriendlyError)
+		//	Update one by fields
+		UpdateOneByFields(user *user, fields []string) *common.FriendlyError
+		//	Update fully
+		UpdateOne(user *user) *common.FriendlyError
 	}
 	userRepository struct {
 		users *mongo.Collection
@@ -43,14 +45,6 @@ func (r *userRepository) InsertNewUser(user *user) *common.FriendlyError {
 	return nil
 }
 
-func (r *userRepository) AddNewRole(user *user, roleName string) *common.FriendlyError {
-	if err := user.AddRole(roleName); err != nil {
-		return err
-	}
-
-	return r.UpdateRole(user, context.Background())
-}
-
 func (r *userRepository) GetUserById(id userId) (*user, *common.FriendlyError) {
 	user := new(user)
 
@@ -65,10 +59,32 @@ func (r *userRepository) GetUserById(id userId) (*user, *common.FriendlyError) {
 	return user, nil
 }
 
-func (r *userRepository) UpdateRole(user *user, ctx context.Context) *common.FriendlyError {
+func (r *userRepository) UpdateOneByFields(user *user, fields []string) *common.FriendlyError {
+	var updates bson.D
+	for _, field := range fields {
+		updates = append(updates, bson.E{Key: field, Value: user.GetFieldValue(field)})
+	}
 
-	if _, err := r.users.UpdateByID(ctx, primitive.ObjectID(user.UserId), bson.D{
-		{Key: "$set", Value: bson.D{{Key: "roles", Value: user.Roles}}},
+	return updateById(r.users, user, updates)
+}
+
+func (r *userRepository) UpdateOne(user *user) *common.FriendlyError {
+
+	if _, err := r.users.UpdateByID(context.Background(), primitive.ObjectID(user.UserId), user); err != nil {
+		return &common.FriendlyError{
+			Message:        err.Error(),
+			DevMessage:     err.Error(),
+			InnerException: err,
+		}
+	}
+
+	return nil
+}
+
+func updateById(userCollection *mongo.Collection, user *user, updates bson.D) *common.FriendlyError {
+
+	if _, err := userCollection.UpdateByID(context.Background(), primitive.ObjectID(user.UserId), bson.D{
+		{Key: "$set", Value: updates},
 	}); err != nil {
 		return &common.FriendlyError{
 			Message:        err.Error(),
