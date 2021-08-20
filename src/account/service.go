@@ -22,8 +22,8 @@ type (
 		//	AddNewUser adds new user
 		AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
 			phone_number string, gdpr bool, address *location.Address) *errService
-
-		AddRole(roleName string, userId string) *common.FriendlyError
+		//	AddRoleToUser adds role to user
+		AddRoleToUser(roleName string, userId string) *common.FriendlyError
 	}
 	service struct {
 		users UserRepository
@@ -45,7 +45,7 @@ func (s *service) AddNewUser(firstname string, lastname string, username string,
 	return nil
 }
 
-func (s *service) AddRole(roleName string, userId string) *common.FriendlyError {
+func (s *service) AddRoleToUser(roleName string, userId string) *common.FriendlyError {
 	user, err := s.users.GetUserById(UserIdFromHex(userId))
 	if err != nil {
 		return err

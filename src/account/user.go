@@ -99,6 +99,11 @@ func (u *user) AddRole(roleName string) *common.FriendlyError {
 		}
 	}
 
+	// if role is already assign to user return nil
+	if utils.ExistInSlice(u.Roles, roleName) {
+		return nil
+	}
+
 	u.Roles = append(u.Roles, roleName)
 	return nil
 }

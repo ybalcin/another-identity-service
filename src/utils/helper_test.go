@@ -30,3 +30,13 @@ func TestHashPassword(t *testing.T) {
 		t.Errorf("\n hash and password compare result false!")
 	}
 }
+
+func TestExistInSlice(t *testing.T) {
+	s := []string{"1", "2", "3"}
+
+	if ok := ExistInSlice(s, "1"); ok == false {
+		t.FailNow()
+	}
+
+	ExistInSlice("asdasd", "1")
+}

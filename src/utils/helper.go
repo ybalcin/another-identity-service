@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"reflect"
 	"strings"
 	"unicode"
 
@@ -48,4 +49,20 @@ func HashPassword(pwd string) string {
 	}
 
 	return string(hash)
+}
+
+func ExistInSlice(slice interface{}, value interface{}) bool {
+	s := reflect.ValueOf(slice)
+
+	if s.Kind() != reflect.Slice {
+		panic("Invalid data-type!")
+	}
+
+	for i := 0; i < s.Len(); i++ {
+		if s.Index(i).Interface() == value {
+			return true
+		}
+	}
+
+	return false
 }
