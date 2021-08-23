@@ -16,7 +16,7 @@ const (
 	//	user colleciton name
 	user_collection string = "users"
 
-	ERR_EMPTY_ROLE_NAME = "Role name is empty!"
+	err_empty_role_name = "Role name is empty!"
 )
 
 //	Unique identifier for user
@@ -44,7 +44,7 @@ type user struct {
 }
 
 // NewUser creates new user
-func CreateNewUser(id userId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
+func NewUser(id userId, firstname string, lastname string, username string, email string, passsword string, birth_date t.Time,
 	phone_number string, gdpr bool, address *l.Address) (*user, []*common.ValidationError) {
 
 	addresses := []l.Address{
@@ -95,7 +95,7 @@ func (u *user) Equals(other *user) bool {
 func (u *user) AddRole(roleName string) *common.FriendlyError {
 	if roleName == "" {
 		return &common.FriendlyError{
-			Message: ERR_EMPTY_ROLE_NAME,
+			Message: err_empty_role_name,
 		}
 	}
 

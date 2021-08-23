@@ -49,7 +49,7 @@ func TestAddNewUserErrRepository(t *testing.T) {
 		County:  "kçekmece",
 	})
 
-	if errService == nil || errService.FriendlyMessage != insertNewUserError {
+	if errService == nil || errService.FriendlyMessage != err_insert_new_user {
 		t.Errorf("TestAddNewUserErrRepository fail!")
 	}
 }

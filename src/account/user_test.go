@@ -9,7 +9,7 @@ import (
 )
 
 func TestValidate(t *testing.T) {
-	_, err := CreateNewUser(NewUserId(), "", "asdasd", "asdasd", "email", "asdasd", time.Now().UTC(), "asdasd",
+	_, err := NewUser(NewUserId(), "", "asdasd", "asdasd", "email", "asdasd", time.Now().UTC(), "asdasd",
 		true, &location.Address{
 			Country: "tr",
 			City:    "tr",
@@ -22,7 +22,7 @@ func TestValidate(t *testing.T) {
 }
 
 func TestGetFieldValue(t *testing.T) {
-	user, _ := CreateNewUser(NewUserId(), "", "asdasd", "asdasd", "a@a.com", "asdasd", time.Now().UTC(), "asdasd",
+	user, _ := NewUser(NewUserId(), "", "asdasd", "asdasd", "a@a.com", "asdasd", time.Now().UTC(), "asdasd",
 		true, &location.Address{
 			Country: "tr",
 			City:    "tr",

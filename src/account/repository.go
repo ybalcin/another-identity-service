@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/ybalcin/another-identity-service/common"
 	"github.com/ybalcin/another-identity-service/store"
@@ -12,7 +13,7 @@ import (
 )
 
 const (
-	ERR_INSERT string = "[log_account_repository_insertnewuser_insertone]"
+	err_insert string = "[log_account_repository_insertnewuser_insertone]"
 )
 
 type (
@@ -34,10 +35,10 @@ type (
 func (r *userRepository) InsertNewUser(user *user) *common.FriendlyError {
 
 	if _, err := r.users.InsertOne(context.Background(), user); err != nil {
-		log.Fatalf(ERR_INSERT+": %s", err)
+		log.Fatalf(err_insert+": %s", err)
 		return &common.FriendlyError{
-			Message:        ERR_INSERT,
-			DevMessage:     ERR_INSERT,
+			Message:        err_insert,
+			DevMessage:     err_insert,
 			InnerException: err,
 		}
 	}
@@ -62,7 +63,7 @@ func (r *userRepository) GetUserById(id userId) (*user, *common.FriendlyError) {
 func (r *userRepository) UpdateOneByFields(user *user, fields []string) *common.FriendlyError {
 	var updates bson.D
 	for _, field := range fields {
-		updates = append(updates, bson.E{Key: field, Value: user.GetFieldValue(field)})
+		updates = append(updates, bson.E{Key: strings.ToLower(field), Value: user.GetFieldValue(field)})
 	}
 
 	return updateById(r.users, user, updates)
@@ -96,7 +97,7 @@ func updateById(userCollection *mongo.Collection, user *user, updates bson.D) *c
 	return nil
 }
 
-//	NewUserRepository gets new user repository
+//	NewUserRepository user repository initializing constructor
 func NewUserRepository() UserRepository {
 	mgoStore := store.GetMgoStore()
 	userRepo := userRepository{

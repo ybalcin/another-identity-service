@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	insertNewUserError string = "An error occured while adding new user!"
-	userNotFound       string = "User not found!"
+	err_insert_new_user string = "An error occured while adding new user!"
+	err_user_not_found  string = "User not found!"
 )
 
 type (
@@ -33,11 +33,11 @@ type (
 func (s *service) AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
 	phone_number string, gdpr bool, address *location.Address) *errService {
 
-	new_user, _ := CreateNewUser(NewUserId(), firstname, lastname, username, email, password, birth_date, phone_number, gdpr, address)
+	new_user, _ := NewUser(NewUserId(), firstname, lastname, username, email, password, birth_date, phone_number, gdpr, address)
 
 	if errRepository := s.users.InsertNewUser(new_user); errRepository != nil {
 		return &errService{
-			FriendlyMessage: insertNewUserError,
+			FriendlyMessage: err_insert_new_user,
 			InnerException:  errRepository.InnerException,
 		}
 	}
@@ -53,7 +53,7 @@ func (s *service) AddRoleToUser(roleName string, userId string) *common.Friendly
 
 	if user == nil {
 		return &common.FriendlyError{
-			Message: userNotFound,
+			Message: err_user_not_found,
 		}
 	}
 
@@ -64,6 +64,7 @@ func (s *service) AddRoleToUser(roleName string, userId string) *common.Friendly
 	return s.users.UpdateOneByFields(user, []string{"Roles"})
 }
 
+// NewService service initializing constructor
 func NewService(userRepository UserRepository) Service {
 	return &service{
 		users: userRepository,
