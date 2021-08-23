@@ -14,7 +14,7 @@ type role struct {
 	Name   string     `bson:"name"`
 }
 
-func CreateNewRole(roleId roleId, name string) *role {
+func NewRole(roleId roleId, name string) *role {
 	return &role{
 		RoleId: p.ObjectID(roleId),
 		Name:   name,

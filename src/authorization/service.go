@@ -22,7 +22,7 @@ func (s *service) GetAll() ([]role, *common.FriendlyError) {
 }
 
 func (s *service) AddNewRole(roleId roleId, roleName string) *common.FriendlyError {
-	role := CreateNewRole(roleId, roleName)
+	role := NewRole(roleId, roleName)
 
 	if err := s.roles.InsertNewRole(role); err != nil {
 		return err
@@ -31,6 +31,7 @@ func (s *service) AddNewRole(roleId roleId, roleName string) *common.FriendlyErr
 	return nil
 }
 
+// NewService service initializing constructor
 func NewService(roleRepository RoleRepository) Service {
 	return &service{
 		roles: roleRepository,

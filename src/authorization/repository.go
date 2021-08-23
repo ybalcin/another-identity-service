@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ERR_INSERT string = "[log_authorization_repository_insertnewrole_insertone]"
+	err_insert string = "[log_authorization_repository_insertnewrole_insertone]"
 )
 
 type (
@@ -45,10 +45,10 @@ func (r *roleRepository) GetAll() ([]role, *common.FriendlyError) {
 func (r *roleRepository) InsertNewRole(role *role) *common.FriendlyError {
 	_, err := r.roles.InsertOne(context.Background(), role)
 	if err != nil {
-		log.Fatalf(ERR_INSERT+": %s", err)
+		log.Fatalf(err_insert+": %s", err)
 		return &common.FriendlyError{
-			Message:        ERR_INSERT,
-			DevMessage:     ERR_INSERT,
+			Message:        err_insert,
+			DevMessage:     err_insert,
 			InnerException: err,
 		}
 	}
@@ -56,6 +56,7 @@ func (r *roleRepository) InsertNewRole(role *role) *common.FriendlyError {
 	return nil
 }
 
+// NewRoleRepository role repository initializing constructor
 func NewRoleRepository() RoleRepository {
 	mgoStore := store.GetMgoStore()
 	roleRepo := roleRepository{
