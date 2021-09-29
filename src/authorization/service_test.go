@@ -6,8 +6,8 @@ import (
 	"github.com/ybalcin/another-identity-service/common"
 )
 
-func TestAddNewRole(t *testing.T) {
-	roles := []*role{}
+func TestService_AddNewRole(t *testing.T) {
+	var roles []*role
 
 	repo := new(mockRepository)
 	repo.InsertNewRoleFn = func(role *role) *common.FriendlyError {

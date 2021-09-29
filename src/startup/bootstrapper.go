@@ -4,15 +4,24 @@ import (
 	"github.com/ybalcin/another-identity-service/store"
 )
 
-//	BootstrapperInit starts application requirements
 // 	initialization sequence must not disturbed
-func BootstrapperInit() {
+func init() {
 	//	Initialize app config
 	initConfig()
 
 	//	Initialize mongo
 	initMongo()
 }
+
+//	BootstrapperInit starts application requirements
+// 	initialization sequence must not disturbed
+//func BootstrapperInit() {
+//	//	Initialize app config
+//	initConfig()
+//
+//	//	Initialize mongo
+//	initMongo()
+//}
 
 func initMongo() {
 	//	Set config

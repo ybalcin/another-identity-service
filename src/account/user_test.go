@@ -8,7 +8,7 @@ import (
 	"github.com/ybalcin/another-identity-service/location"
 )
 
-func TestValidate(t *testing.T) {
+func TestUser_Validate(t *testing.T) {
 	_, err := NewUser(NewUserId(), "", "asdasd", "asdasd", "email", "asdasd", time.Now().UTC(), "asdasd",
 		true, &location.Address{
 			Country: "tr",
@@ -21,7 +21,7 @@ func TestValidate(t *testing.T) {
 	}
 }
 
-func TestGetFieldValue(t *testing.T) {
+func TestUser_GetFieldValue(t *testing.T) {
 	user, _ := NewUser(NewUserId(), "", "asdasd", "asdasd", "a@a.com", "asdasd", time.Now().UTC(), "asdasd",
 		true, &location.Address{
 			Country: "tr",

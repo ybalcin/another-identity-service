@@ -17,6 +17,9 @@ type (
 
 		UpdateOneFn      func(user *user) *common.FriendlyError
 		UpdateOneInvoked bool
+
+		GetUserListFn      func() ([]*user, *common.FriendlyError)
+		GetUserListInvoked bool
 	}
 )
 
@@ -38,4 +41,9 @@ func (r *mockRepository) UpdateOneByFields(user *user, fields []string) *common.
 func (r *mockRepository) UpdateOne(user *user) *common.FriendlyError {
 	r.UpdateOneInvoked = true
 	return r.UpdateOneFn(user)
+}
+
+func (r *mockRepository) GetUserList() ([]*user, *common.FriendlyError) {
+	r.GetUserListInvoked = true
+	return r.GetUserListFn()
 }

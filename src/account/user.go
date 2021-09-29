@@ -115,7 +115,7 @@ func (u *user) GetFieldValue(field string) interface{} {
 	return reflectedField.Interface()
 }
 
-// NewUserId generates uniqueue user Id
+// NewUserId generates unique user Id
 func NewUserId() userId {
 	return userId(p.NewObjectID())
 }

@@ -20,7 +20,7 @@ type config struct {
 	Database string
 }
 
-// initConfg initialize app config from json
+// initConfig initialize app config from json
 func initConfig() {
 	var err error
 	var file *os.File

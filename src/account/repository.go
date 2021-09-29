@@ -17,7 +17,7 @@ const (
 )
 
 type (
-	UserRepository interface {
+	IUserRepository interface {
 		//	InsertNewUser inserts new user to collection
 		InsertNewUser(user *user) *common.FriendlyError
 		//	Gets user by id
@@ -26,6 +26,8 @@ type (
 		UpdateOneByFields(user *user, fields []string) *common.FriendlyError
 		//	Update fully
 		UpdateOne(user *user) *common.FriendlyError
+		// 	GetList gets user list
+		GetUserList() ([]*user, *common.FriendlyError)
 	}
 	userRepository struct {
 		users *mongo.Collection
@@ -82,6 +84,32 @@ func (r *userRepository) UpdateOne(user *user) *common.FriendlyError {
 	return nil
 }
 
+func (r *userRepository) GetUserList() ([]*user, *common.FriendlyError) {
+	var users []*user
+
+	cursor, err := r.users.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var user user
+		err = cursor.Decode(&user)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		users = append(users, &user)
+	}
+
+	if err = cursor.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return users, nil
+}
+
 func updateById(userCollection *mongo.Collection, user *user, updates bson.D) *common.FriendlyError {
 
 	if _, err := userCollection.UpdateByID(context.Background(), primitive.ObjectID(user.UserId), bson.D{
@@ -98,7 +126,7 @@ func updateById(userCollection *mongo.Collection, user *user, updates bson.D) *c
 }
 
 //	NewUserRepository user repository initializing constructor
-func NewUserRepository() UserRepository {
+func NewUserRepository() IUserRepository {
 	mgoStore := store.GetMgoStore()
 	userRepo := userRepository{
 		users: mgoStore.Db.Collection(user_collection),

@@ -18,24 +18,26 @@ type (
 		InnerException  error
 	}
 
-	Service interface {
+	IAccountService interface {
 		//	AddNewUser adds new user
-		AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
-			phone_number string, gdpr bool, address *location.Address) *errService
+		AddNewUser(firstname string, lastname string, username string, email string, password string, birthDate time.Time,
+			phoneNumber string, gdpr bool, address *location.Address) *errService
 		//	AddRoleToUser adds role to user
 		AddRoleToUser(roleName string, userId string) *common.FriendlyError
+		//	GetUserList gets users
+		GetUserList() ([]*user, *common.FriendlyError)
 	}
-	service struct {
-		users UserRepository
+	accountService struct {
+		users IUserRepository
 	}
 )
 
-func (s *service) AddNewUser(firstname string, lastname string, username string, email string, password string, birth_date time.Time,
-	phone_number string, gdpr bool, address *location.Address) *errService {
+func (s *accountService) AddNewUser(firstname string, lastname string, username string, email string, password string, birthDate time.Time,
+	phoneNumber string, gdpr bool, address *location.Address) *errService {
 
-	new_user, _ := NewUser(NewUserId(), firstname, lastname, username, email, password, birth_date, phone_number, gdpr, address)
+	newUser, _ := NewUser(NewUserId(), firstname, lastname, username, email, password, birthDate, phoneNumber, gdpr, address)
 
-	if errRepository := s.users.InsertNewUser(new_user); errRepository != nil {
+	if errRepository := s.users.InsertNewUser(newUser); errRepository != nil {
 		return &errService{
 			FriendlyMessage: err_insert_new_user,
 			InnerException:  errRepository.InnerException,
@@ -45,7 +47,7 @@ func (s *service) AddNewUser(firstname string, lastname string, username string,
 	return nil
 }
 
-func (s *service) AddRoleToUser(roleName string, userId string) *common.FriendlyError {
+func (s *accountService) AddRoleToUser(roleName string, userId string) *common.FriendlyError {
 	user, err := s.users.GetUserById(UserIdFromHex(userId))
 	if err != nil {
 		return err
@@ -64,9 +66,18 @@ func (s *service) AddRoleToUser(roleName string, userId string) *common.Friendly
 	return s.users.UpdateOneByFields(user, []string{"Roles"})
 }
 
-// NewService service initializing constructor
-func NewService(userRepository UserRepository) Service {
-	return &service{
+func (s *accountService) GetUserList() ([]*user, *common.FriendlyError) {
+	users, err := s.users.GetUserList()
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
+// NewAccountService accountService initializing constructor
+func NewAccountService(userRepository IUserRepository) IAccountService {
+	return &accountService{
 		users: userRepository,
 	}
 }
